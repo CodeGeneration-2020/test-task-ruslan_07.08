@@ -1,5 +1,6 @@
 import os
 import time
+import openai
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader, TextLoader
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
@@ -7,10 +8,14 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_pinecone.vectorstores import PineconeVectorStore
 from pinecone import Pinecone, ServerlessSpec
 
+
 load_dotenv()
 
 pinecone_api_key = os.getenv("PINECONE_API_KEY")
 pinecone_index_name = os.getenv("PINECONE_INDEX_NAME")
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+openai.api_key = openai_api_key
 
 
 # Initialize Pinecone client
@@ -46,6 +51,13 @@ def load_document(file_path: str, file_type: str):
 def split_document(documents):
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     return text_splitter.split_documents(documents)
+
+
+# Embed user's query
+def get_embedding(text: str) -> list:
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    embedding = embeddings.embed_query(text)
+    return embedding
 
 
 # Embed documents and store in Pinecone
