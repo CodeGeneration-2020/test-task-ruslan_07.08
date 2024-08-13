@@ -26,12 +26,16 @@ The server will run on http://localhost:8000.
 ### API Endpoints
 ##### WebSocket Endpoint
 /chat: The WebSocket endpoint for the live chat. Users can send messages and receive responses in real-time.
+
 Supported Commands
+
 /reset: Resets the chat context. This clears all previous interactions and starts a new session.
+
 /nocontext: Sends a query without using the stored context. The response is generated solely based on the current query.
 ##### REST API Endpoints
 - POST /upload: Uploads and processes a document to store in the Pinecone vector database.
 - Accepted File Types: application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, text/plain
+
 Response:
 ```json
 {
